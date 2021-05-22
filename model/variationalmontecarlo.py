@@ -33,7 +33,7 @@ class FokkerPlanckMonteCarlo(MonteCarloMethod):
         if sampler == None: sampler = ListSampler()
         walkers = self.initial_state(N)
         for i in range(epochs):
-            walkers += self.force(walkers)*self.delta_t/2 + np.random.normal(0, 1, walkers.shape)*np.sqrt(self.delta_t)
+            walkers += self.force(walkers)*self.delta_t/2 + np.random.normal(0, np.sqrt(self.delta_t), walkers.shape)
             if i >= skipped:
                 sampler.add_samples(np.array(walkers))
         return sampler
@@ -54,7 +54,7 @@ class VariationalFokkerPlanckMonteCarlo(MonteCarloMethod):
         for i in range(epochs):
             walkers += self.force(walkers)*self.delta_t/2 
             vals = self.function(walkers)
-            new_walkers = walkers + np.random.normal(0, 1, walkers.shape)*np.sqrt(self.delta_t)
+            new_walkers = walkers + np.random.normal(0, np.sqrt(self.delta_t), walkers.shape)
             new_vals = self.function(new_walkers)
             selection = self.greens_function(new_walkers, walkers)/self.greens_function(walkers, new_walkers)*new_vals/vals > np.random.rand(N)
             walkers = np.concatenate((new_walkers[selection], walkers[~selection]))

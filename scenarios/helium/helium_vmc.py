@@ -21,6 +21,6 @@ def local_energy(alpha):
 # A helium atom with two electrons
 for alpha in np.arange(0.05, 0.3, 0.05):
     psi2 = wavefunction2(alpha)
-    MC = VariationalMonteCarlo(psi2, lambda x : x + (np.random.rand(*x.shape) - 0.5)*0.2, lambda N : 2*(np.random.rand(N, 2, 3) - 0.5))
+    MC = VariationalMonteCarlo(psi2, lambda x : x + 5*(np.random.rand(*x.shape) - 0.5), lambda N : 2*(np.random.rand(N, 2, 3) - 0.5))
     samples = MC.generate_samples(400, 30000, 4000)
     print(f"{alpha}:", mc_integrator(local_energy(alpha), samples.get_samples()))

@@ -24,7 +24,7 @@ def local_energy(alpha):
 bins = 500
 for alpha in np.arange(0.8, 1.3, 0.1):
     psi2 = wavefunction2(alpha)
-    MC = VariationalMonteCarlo(psi2, lambda x : x + 0.01*(np.random.rand(*x.shape) - 0.5), lambda N : 1*(np.random.rand(N, 3) - 0.5))
+    MC = VariationalMonteCarlo(psi2, lambda x : x + (np.random.rand(*x.shape) - 0.5), lambda N : 1*(np.random.rand(N, 3) - 0.5))
     samples = MC.generate_samples(400, 40000, 14000)
     print(f"{alpha}:", mc_integrator(local_energy(alpha), samples.get_samples()))
     print(samples.get_samples().shape)

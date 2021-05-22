@@ -21,4 +21,10 @@ for alpha in np.arange(0.4, 0.64, 0.05):
     psi2 = wavefunction2(alpha)
     MC = VariationalMonteCarlo(psi2, lambda x : x + (np.random.rand(len(x)) - 0.5), lambda N : 2*(np.random.rand(N) - 0.5))
     samples = MC.generate_samples(400, 30000, 4000)
+    plt.hist(samples.get_samples(), bins=bins, density=True)
+    x = np.linspace(-10, 10, bins)
+    f = psi2(x[:])
+    C = 20*np.sum(f)/bins
+    plt.plot(x, f/C)
+    plt.show()
     print(f"{alpha}:", mc_integrator(local_energy(alpha), samples.get_samples()))

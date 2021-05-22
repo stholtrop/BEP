@@ -23,5 +23,12 @@ class ListSampler(Sampler):
         self.sample_list = []
         return self.cache
 
+class JointSampler(Sampler):
+    def __init__(self, samplers):
+        self.samplers = samplers
+
+    def __getattr__(self, name: str):
+        return self.samplers[name]
+
 class GridSampler(Sampler):
     pass
