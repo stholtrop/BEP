@@ -17,10 +17,10 @@ class DiffusionMonteCarlo(MonteCarloMethod):
         walkers = self.initial_state(N)
         E_target = self.E_0
         for i in range(epochs):
-            walkers += np.random.normal(0, np.sqrt(self.delta_t), walkers.size)
-            q = (np.exp(-self.delta_t*(self.potential(walkers) - E_target)) + np.random.rand(walkers.size)).astype(int)
+            walkers += np.random.multivariate_normal(np.zeros(walkers[0].shape), self.delta_t*np.identity(walkers[0].shape[0]), walkers.shape[0])
+            q = (np.exp(-self.delta_t*(self.potential(walkers) - E_target)) + np.random.rand(walkers.shape[0])).astype(int)
             walkers = np.repeat(walkers, q, axis=0)
-            E_target = self.E_0 + self.alpha*np.log(N/walkers.size)
+            E_target = self.E_0 + self.alpha*np.log(N/walkers.shape[0])
             if i >= skipped:
                 sampler.samples.add_samples(walkers)
                 sampler.energies.add_samples(E_target)
